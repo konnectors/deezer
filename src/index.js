@@ -159,7 +159,18 @@ async function fetchPlayListDetails(playlist, api_token) {
 
   return {
     id: playlist.PLAYLIST_ID,
-    ...content.results.DATA,
-    songs: content.results.SONGS.data
+    title: content.results.DATA.TITLE,
+    description: content.results.DATA.DESCRIPTION,
+    count: content.results.DATA.NB_SONG,
+    songs: content.results.SONGS.data.map(song => ({
+      id: song.SNG_ID,
+      title: song.SNG_TITLE,
+      artist: song.ART_NAME,
+      duration: song.DURATION,
+      album: {
+        id: song.ALB_ID,
+        title: song.ALB_TITLE
+      }
+    }))
   }
 }
