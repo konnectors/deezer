@@ -54,6 +54,9 @@
     "fr": {
       "short_description": "Récupère vos factures et playlists deezer",
       "long_description": "Récupères vos factures et playlists deezer",
+      "doctypes": {
+        "io.cozy.deezer.playlists": "Playlists Deezer"
+      },
       "permissions": {
         "playlists": {
           "description": "Utilisé pour garder les détails de vos playlists"
@@ -75,6 +78,9 @@
     "en": {
       "short_description": "Fetches your Deezer bills and playlists",
       "long_description": "Fetches your Deezer bills and playlists",
+      "doctypes": {
+        "io.cozy.deezer.playlists": "Deezer playlists"
+      },
       "permissions": {
         "playlists": {
           "description": "Required to keep your Deezer playlists"
