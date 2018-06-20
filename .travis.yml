@@ -1,0 +1,41 @@
+language: node_js
+node_js:
+- '8'
+env:
+  global:
+  - GH_USER_EMAIL="travis@example.org"
+  - GH_USER_NAME="cozy-bot"
+  - DEPLOY_REPOSITORY="git@github.com:konnectors/deezer.git"
+  - secure: ZpJ77QvKq/8QgCuqXaxmPg1ZAPGq51Q/2DKv8Qg3AE0bMtOOpHjiXo8W28MeyRy3wOALxtX07BX/M3F5cxC967Q3wKKmzsyVDNiP4zukSqxSo6/2wJIx+rVVAYxu5+8SSeR0JM8luU/vuv/et2sa59ZOOsgcMoMzoPWfUfZXtsjFo2nHQCCvnbljDQkBmjQZo9CFoO2GwCG2NbgehD16yxrSXe0PjzOb2Jrirx4STY8F4esAMIROkbuVpmxzfj8xuFRL5sq7a6EVWigvZPT3gmn2sxVWF90wisCq0TjyB5c9RAfCnlsyZSFtdxZxihH3fTlC1xxytP8jaw3cgyAi9oqQYec/r7wPfXqDACaw4spTUz7qBg0w92DGDnvc33itfwYtlrQx5F13BrIT5EDaFpCghijr7ISrs1bmmdUCJgLcV9G1ORB9VXrj3WTWpIQuDwV0V9ftmRfCPj6PI1UpJroE65IlEo/dgBA2B8mYASRfV3weDwHyqw/GDejHjIgOcPK0tXkd4tYbCSrnOVLS5+eBj8ZZxaIIefn5txXpq0gK3JKB1S9N53BBIqyiYkBSJ/bosYrVYAhe6CLKrspbQik4MRwXmouYqApFSUqo9+H43+dXDaaygXw2kKcTojmXSmVuMGLro8OUjWQPLScC2rPljHkQ3YGx/Kgf3yRNUUo=
+cache:
+  yarn: true
+  directories:
+  - node_modules
+branches:
+  except:
+  - build
+  - latest
+script:
+- yarn lint
+- yarn build
+- yarn run check
+deploy:
+- provider: script
+  skip-cleanup: true
+  script: DEPLOY_BRANCH=build yarn deploy && yarn cozyPublish
+  on:
+    branch: master
+- provider: script
+  skip-cleanup: true
+  script: DEPLOY_BRANCH=build yarn deploy && yarn cozyPublish
+  on:
+    tags: true
+before_install:
+- openssl aes-256-cbc -K $encrypted_604ebb0a902d_key -iv $encrypted_604ebb0a902d_iv
+  -in github_deploy_key.enc -out /tmp/github_deploy_key -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/github_deploy_key
+- ssh-add /tmp/github_deploy_key
+after_deploy:
+- rm /tmp/github_deploy_key
+- ssh-add -D
