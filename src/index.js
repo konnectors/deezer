@@ -44,7 +44,6 @@ async function start(fields) {
   })
 
   const playlists = await fetchPlayLists()
-
   const playlistsToSave = await hydrateAndFilter(playlists, PLAYLIST_DOCTYPE, {
     keys: ['id']
   })
@@ -53,11 +52,17 @@ async function start(fields) {
 }
 
 async function authenticate(mail, password) {
+  // Initiate API UserData object, for checkFormLogin token
+  const req1 = await request({
+    url: `https://www.deezer.com/ajax/gw-light.php?method=deezer.getUserData&input=3&api_version=1.0&api_token=&cid=`
+  })
+
   const result = await request.post(`${baseUrl}/ajax/action.php`, {
     form: {
       type: 'login',
       mail,
-      password
+      password,
+      checkFormLogin: req1.results.checkFormLogin
     }
   })
 
