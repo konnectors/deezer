@@ -7,6 +7,7 @@ process.env.SENTRY_DSN =
 const {
   BaseKonnector,
   requestFactory,
+  cozyClient,
   log,
   errors,
   scrape,
@@ -14,6 +15,7 @@ const {
   hydrateAndFilter,
   addData
 } = require('cozy-konnector-libs')
+const path = require('path')
 const request = requestFactory({
   // debug: true,
   cheerio: false,
@@ -40,6 +42,8 @@ async function start(fields) {
   log('info', 'Parsing bills')
   const $ = await fetchBillsPage()
   const bills = parseBills($)
+
+  await removeOldFiles(bills, fields)
 
   log('info', 'Saving data to Cozy')
   await saveBills(bills, fields.folderPath, {
@@ -193,5 +197,25 @@ async function fetchPlayListDetails(playlist, api_token) {
         title: song.ALB_TITLE
       }
     }))
+  }
+}
+
+async function removeOldFiles(bills, fields) {
+  //  files from before 12/10/2018 were html files with pdf mime type.
+  for (const bill of bills) {
+    try {
+      const file = await cozyClient.files.statByPath(
+        path.join(fields.folderPath, bill.filename)
+      )
+      if (new Date(file.attributes.updated_at) < new Date('2018-10-12')) {
+        log(
+          'warn',
+          `Removing ${bill.filename} because it may be html in the pdf file`
+        )
+        await cozyClient.files.trashById(file._id)
+      }
+    } catch (err) {
+      log('info', err.message)
+    }
   }
 }
