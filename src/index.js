@@ -17,8 +17,12 @@ const {
 const request = requestFactory({
   // debug: true,
   cheerio: false,
-  json: false,
-  jar: true
+  json: true,
+  jar: true,
+  headers: {
+    'User-Agent':
+      'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:62.0) Gecko/20100101 Firefox/62.0'
+  }
 })
 const cheerio = require('cheerio')
 const moment = require('moment')
@@ -103,6 +107,12 @@ function parseBills($) {
     return {
       ...bill,
       filename: `${moment(bill.date).format('YYYY-MM-DD')}_deezer.pdf`,
+      requestOptions: {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:62.0) Gecko/20100101 Firefox/62.0'
+        }
+      },
       vendor: 'Deezer',
       metadata: {
         importDate: new Date(),
