@@ -3,7 +3,7 @@
   "name": "Deezer",
   "type": "konnector",
   "language": "node",
-  "icon": "deezer.png",
+  "icon": "deezer.svg",
   "slug": "deezer",
   "source": "git://github.com/konnectors/deezer.git",
   "editor": "Cozy",
