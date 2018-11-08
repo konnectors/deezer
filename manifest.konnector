@@ -1,9 +1,9 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.1",
   "name": "Deezer",
   "type": "konnector",
   "language": "node",
-  "icon": "deezer.png",
+  "icon": "icon.svg",
   "slug": "deezer",
   "source": "git://github.com/konnectors/deezer.git",
   "editor": "Cozy",
