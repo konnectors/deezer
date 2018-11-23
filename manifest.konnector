@@ -107,5 +107,6 @@
       }
     }
   },
+  "banksTransactionRegExp": "\\bdeezer\\b",
   "manifest_version": "2"
 }
