@@ -5,7 +5,7 @@
   "language": "node",
   "icon": "icon.svg",
   "slug": "deezer",
-  "source": "git://github.com/konnectors/deezer.git",
+  "source": "git@github.com:konnectors/deezer.git",
   "editor": "Cozy",
   "vendor_link": "https://www.deezer.com/login",
   "categories": [
