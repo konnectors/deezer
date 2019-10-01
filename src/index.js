@@ -47,7 +47,9 @@ class DeezerKonnector extends CookieKonnector {
     log('info', 'Saving data to Cozy')
     await this.saveBills(bills, fields.folderPath, {
       identifiers: ['deezer'],
-      contentType: 'text/html'
+      contentType: 'text/html',
+      sourceAccount: this.accountId,
+      sourceAccountIdentifier: fields.login
     })
 
     const playlists = await this.fetchPlayLists()
