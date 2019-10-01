@@ -11,7 +11,9 @@ const {
   errors,
   scrape,
   hydrateAndFilter,
-  addData
+  addData,
+  cozyClient,
+  utils
 } = require('cozy-konnector-libs')
 let request
 const cheerio = require('cheerio')
@@ -39,13 +41,15 @@ class DeezerKonnector extends CookieKonnector {
     }
     log('info', 'Parsing bills')
     const $ = await this.fetchBillsPage()
-    const bills = this.parseBills($)
+    let bills = this.parseBills($)
+    bills = await this.filterBillsWithoutPDF(bills, fields.folderPath)
 
     log('info', 'Saving data to Cozy')
     await this.saveBills(bills, fields.folderPath, {
       identifiers: ['deezer'],
-      contentType: 'application/pdf'
+      contentType: 'text/html'
     })
+
     const playlists = await this.fetchPlayLists()
     const playlistsToSave = await hydrateAndFilter(
       playlists,
@@ -141,7 +145,7 @@ class DeezerKonnector extends CookieKonnector {
     ).map(bill => {
       return {
         ...bill,
-        filename: `${moment(bill.date).format('YYYY-MM-DD')}_deezer.pdf`,
+        filename: `${moment(bill.date).format('YYYY-MM-DD')}_deezer.html`,
         requestOptions: {
           headers: {
             'User-Agent':
@@ -157,6 +161,26 @@ class DeezerKonnector extends CookieKonnector {
     })
 
     return bills
+  }
+
+  async filterBillsWithoutPDF(bills, folderPath) {
+    log('debug', `${bills.length} bills before filtering`)
+    let filteredBills = bills
+    const dir = await cozyClient.files.statByPath(folderPath)
+    const oldFiles = await utils.queryAll('io.cozy.files', { dir_id: dir._id })
+    for (const bill of bills) {
+      // Evaluating old name by removing .html
+      const pdfMatchingName = bill.filename.slice(0, -5) + '.pdf'
+      for (const oldFile of oldFiles) {
+        if (oldFile.name.match(pdfMatchingName)) {
+          // Deleting element
+          log('debug', `Removing ${bill.filename}, pdf present`)
+          filteredBills.splice(filteredBills.indexOf(bill), 1)
+        }
+      }
+    }
+    log('debug', `${filteredBills.length} bills after filtering`)
+    return filteredBills
   }
 
   normalizePrice(price) {
