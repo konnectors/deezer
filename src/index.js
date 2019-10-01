@@ -15,7 +15,6 @@ const {
   cozyClient,
   utils
 } = require('cozy-konnector-libs')
-let request
 const cheerio = require('cheerio')
 const moment = require('moment')
 
@@ -24,16 +23,6 @@ const PLAYLIST_DOCTYPE = 'io.cozy.deezer.playlists'
 
 class DeezerKonnector extends CookieKonnector {
   async fetch(fields) {
-    request = this.requestFactory({
-      // debug: true,
-      cheerio: false,
-      json: true,
-      jar: true,
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:62.0) Gecko/20100101 Firefox/62.0'
-      }
-    })
     if (!(await this.testSession())) {
       log('info', 'Authenticating ...')
       await this.authenticate(fields.login, fields.password)
@@ -67,7 +56,7 @@ class DeezerKonnector extends CookieKonnector {
   async testSession() {
     log('info', 'Test the validity of old session')
     try {
-      await request({
+      await this.request({
         url: 'https://www.deezer.com/fr/login',
         resolveWithFullResponse: true,
         followRedirect: false,
@@ -90,18 +79,20 @@ class DeezerKonnector extends CookieKonnector {
   async authenticate(mail, password) {
     // Extracting sitekey for captcha
     const websiteURL = 'https://www.deezer.com/fr/login'
-    const reqLogin = await request({ url: 'https://www.deezer.com/fr/login' })
+    const reqLogin = await this.request({
+      url: 'https://www.deezer.com/fr/login'
+    })
     const $login = cheerio.load(reqLogin)
     const captchaDiv = $login('div[class="recaptcha-wrapper"]').html()
     const websiteKey = captchaDiv.match(/"sitekey": "(.*)"/)[1]
     const captchaToken = await solveCaptcha({ websiteURL, websiteKey })
 
     // Initiate API UserData object, for checkFormLogin token
-    const req1 = await request({
+    const req1 = await this.request({
       url: `https://www.deezer.com/ajax/gw-light.php?method=deezer.getUserData&input=3&api_version=1.0&api_token=&cid=`
     })
 
-    const result = await request.post(`${baseUrl}/ajax/action.php`, {
+    const result = await this.request.post(`${baseUrl}/ajax/action.php`, {
       form: {
         type: 'login',
         mail,
@@ -117,7 +108,7 @@ class DeezerKonnector extends CookieKonnector {
   }
 
   async fetchBillsPage() {
-    const html = await request(`${baseUrl}/account/subscription`)
+    const html = await this.request(`${baseUrl}/account/subscription`)
     return cheerio.load(html)
   }
 
@@ -192,13 +183,13 @@ class DeezerKonnector extends CookieKonnector {
 
   async fetchPlayLists() {
     // first fetch the api token
-    const userData = await request(
+    const userData = await this.request(
       `${baseUrl}/ajax/gw-light.php?method=deezer.getUserData&input=3&api_version=1.0&api_token=`
     )
     const api_token = userData.results.checkForm
 
     // then get the playlists ids from the user menu
-    const userMenu = await request(
+    const userMenu = await this.request(
       `${baseUrl}/ajax/gw-light.php?method=deezer.userMenu&input=3&api_version=1.0&api_token=${api_token}`
     )
 
@@ -214,7 +205,7 @@ class DeezerKonnector extends CookieKonnector {
   }
 
   async fetchPlayListDetails(playlist, api_token) {
-    const content = await request.post(
+    const content = await this.request.post(
       `${baseUrl}/ajax/gw-light.php?method=deezer.pagePlaylist&input=3&api_version=1.0&api_token=${api_token}`,
       {
         json: true,
@@ -254,6 +245,14 @@ class DeezerKonnector extends CookieKonnector {
   }
 }
 
-const connector = new DeezerKonnector()
+const connector = new DeezerKonnector({
+  // debug: true,
+  cheerio: false,
+  json: true,
+  headers: {
+    'User-Agent':
+      'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:62.0) Gecko/20100101 Firefox/62.0'
+  }
+})
 
 connector.run()
