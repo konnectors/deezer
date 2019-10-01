@@ -154,11 +154,7 @@ class DeezerKonnector extends CookieKonnector {
               'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:62.0) Gecko/20100101 Firefox/62.0'
           }
         },
-        vendor: 'Deezer',
-        metadata: {
-          importDate: new Date(),
-          version: 1
-        }
+        vendor: 'Deezer'
       }
     })
 
