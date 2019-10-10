@@ -81,7 +81,7 @@
     },
     "en": {
       "short_description": "Fetches your Deezer bills and playlists",
-      "long_description": "aa",
+      "long_description": "Deezer is a subscription-based French music-streaming service.\n\n__Connect your Deezer account to your Cozy so as to :__\n- gather your invoices from your Premium plan,\n- save your playlists. They are saved in JSON format that you can export in the “settings” section of your Cozy.\n\n__Interaction with the Personal Finance Manager Cozy Banks :__\n\nInvoices gathered will be automatically linked to the relevant debit operations in the cozy Banks app.\n\n&nbsp;\n\n__Configuration :__\n\nEnter the credentials used for Deezer : your email and password. Cozy will then automatically and regularly connect to your Deezer account to get your latest data.\n\nIf you disconnect your Deezer account, data already downloaded will remain. The latter can be deleted manually.",
       "doctypes": {
         "io.cozy.deezer.playlists": "Deezer playlists"
       },
