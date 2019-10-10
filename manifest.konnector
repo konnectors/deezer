@@ -56,8 +56,8 @@
   ],
   "locales": {
     "fr": {
-      "short_description": "Récupère vos factures et playlists deezer",
-      "long_description": "Récupères vos factures et playlists deezer",
+      "short_description": "Récupère vos factures et playlists Deezer",
+      "long_description": "Deezer est un service français d'écoute de musique en ligne. Il fonctionne par abonnement.\n\n&nbsp;\n\n__Connectez votre compte Deezer à votre Cozy pour :__\n- récupérer vos factures émises dans le cadre de votre abonnement Premium,\n- sauvegarder vos playlists dans votre Cozy. Disponible pour tous les abonnés Deezer : Premium et gratuits. Les playlists sont stockés en format JSON. Elles sont récupérables via l’export de vos données Cozy depuis la section Paramètres.\n\n__Lien avec le gestionnaire de budget Cozy Banks :__\n\nLes factures récupérées sont automatiquement liées aux opérations bancaires Deezer concernées si vous utilisez l’app Cozy Banks.\n\n&nbsp;\n\n__Configuration :__\n\nIndiquez l’identifiant email et mot de passe utilisé sur le site Deezer pour connecter votre compte à votre Cozy.\n\nUne fois connecté, votre Cozy se connectera régulièrement à votre compte Deezer pour récupérer les nouveaux éléments et les historiser.\n\nSi vous déconnectez votre compte Deezer, les informations déjà sauvegardées dans votre Cozy restent disponibles. Vous pouvez les supprimer manuellement par ailleurs.",
       "doctypes": {
         "io.cozy.deezer.playlists": "Playlists Deezer"
       },
@@ -81,7 +81,7 @@
     },
     "en": {
       "short_description": "Fetches your Deezer bills and playlists",
-      "long_description": "Fetches your Deezer bills and playlists",
+      "long_description": "Deezer is a subscription-based French music-streaming service.\n\n&nbsp;\n\n__Connect your Deezer account to your Cozy so as to :__\n- gather your invoices from your Premium plan,\n- save your playlists. They are saved in JSON format that you can export in the “settings” section of your Cozy.\n\n__Interaction with the Personal Finance Manager Cozy Banks :__\n\nInvoices gathered will be automatically linked to the relevant debit operations in the cozy Banks app.\n\n&nbsp;\n\n__Configuration :__\n\nEnter the credentials used for Deezer : your email and password. Cozy will then automatically and regularly connect to your Deezer account to get your latest data.\n\nIf you disconnect your Deezer account, data already downloaded will remain. The latter can be deleted manually.",
       "doctypes": {
         "io.cozy.deezer.playlists": "Deezer playlists"
       },
