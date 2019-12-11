@@ -38,7 +38,8 @@ class DeezerKonnector extends CookieKonnector {
       identifiers: ['deezer'],
       contentType: 'text/html',
       sourceAccount: this.accountId,
-      sourceAccountIdentifier: fields.login
+      sourceAccountIdentifier: fields.login,
+      fileIdAttributes: ['date', 'amount']
     })
 
     const playlists = await this.fetchPlayLists()
