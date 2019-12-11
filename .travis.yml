@@ -4,7 +4,10 @@ node_js:
 env:
   global:
   - DEPLOY_REPOSITORY="git@github.com:konnectors/deezer.git"
+  # REGISTRY_TOKEN(editor=cozy, app=deezer)
   - secure: q8E9Qv4gQiGD1IG2NZ+MvhFRVYEPtijGUorkB7eyRnoEk3f7YdQVSpELEjM/AKp/St0TVR87u2r8NjSE8BeAq/i9Wer2OF6h8vF09T7gyNx2ysZZzprp+GlExI1++aPfEtY+4llkh88OkJ04R49Kt5RGv2yP2paZAHdrH8tUtJQwIb8T8s2+hapHJ1QqPps+CRFDmHSyPx6Zj61qqhDqzQp/Jw+FvkefGu4On+cNbkvaid9sGUWclHHiXdAziqBkLDcWFSv7jsUR4CIVv9j5upyIwlk1yAlc2UxDFKlrHT36bv3kL2eD76PbGy5vUlbQoK5Pmo7TioTjFcWMozJ0p1DyBg2g37k9TUNN92jy7c/JSjknV5MFI5NGzYE8EQfPuVM7GejiCypBHJXo4PL9Cmq8uiHLbRxwNn1uplWpKwUHqeMNRQC+iZk/K2gBLDaLwZyGbq2r3NEC4v2q3PPdpMuoJP3Ozbc/p9zKYIXDF10cezhoDLE5RZSP5MkgZwvSw3IdeT1b6FnJ34inEdjkwqcuyrZnDgPxz8Iywb+yudwubNKA3l5zVEhZ54PJu1zagLhVpDOxVOSvPhlOascnniMeGkq2dJBCqlzCKSKTH1WakAX+NWin2O2rcPZfNA/qXhLiadmNDxrm7fBnozKYVZgoBLPw8tVMlrjag3BGizY=
+  # MATTERMOST_HOOK_URL
+  - secure: DLfSAS8C7DE2iiRgkUDSCwB/+zAPnwcUBX257zCM0XqEAohoo1XHjDfvpbjOGj01GBuv1a2I04WmI6bcgFO5mHLhuPud2NcM1AtP6pVCmlhtNS4GHtAFzAdUBZFAGvt5ZxT0854udLqntuitegZXmp9y1vTHqfWLE0ZMJQ8dTo8rbFqPaH7HptU2fX8zp8Irqi7xbBQGSjb+EpS0XHypyt7zlgqj1rUCn+rCbOgIbZUmGBvY3Bx9/q4JCqUkVV2qksQgfr6CZSJmRlEurbtdF37SSajHXOPUT52BU6214FHB1Cc4TN5SL9pgis29Q2o2q2SpJjU0K0/dpgoEnCu4ZisInQCZTcfLZ0/M50eHC9QEmEA5rYyEaJNlFMBP/trPBh3J+Q5PURuic/DBr41EQGA8FGq2MbcyJAr00C+vhJG7iAivJ1irTGQXjcn+hvnsWDhF3Qa+p5vtqU9Y7GS8EAdN8UubaqxuFidCl5YaQ0kuSdze72bpOXNd78Vjf7vHNr8A6vkltamdgrptInL711ltPX4twR5hG1rKEpYUtK2d+kYsk0w99C9NVtGdDnzMEGNOHXLPUaE9zPGg3yARva1OhrfhBmnK5zpH5RUAO/BZp1K4jDBd23wHwLd82pw/8aMoTwCgvIoQHT+6WH9k75PtHTz+CNy+HatTGxEKuuE=
 cache:
   yarn: true
   directories:
@@ -16,7 +19,6 @@ branches:
 script:
 - yarn lint
 - yarn build
-- yarn run check
 deploy:
 - provider: script
   skip-cleanup: true
@@ -25,7 +27,7 @@ deploy:
     branch: master
 - provider: script
   skip-cleanup: true
-  script: DEPLOY_BRANCH=build yarn deploy && yarn cozyPublish
+  script: DEPLOY_BRANCH=build yarn deploy && yarn cozyPublish --postpublish mattermost
   on:
     tags: true
 before_install:
