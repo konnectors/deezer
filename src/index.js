@@ -104,6 +104,7 @@ class DeezerKonnector extends CookieKonnector {
     })
 
     if (result.trim().indexOf('success') === -1) {
+      log('error', result)
       throw new Error(errors.LOGIN_FAILED)
     }
   }
