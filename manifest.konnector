@@ -9,7 +9,7 @@
   "editor": "Cozy",
   "vendor_link": "https://www.deezer.com/login",
   "categories": [
-    "online_services"
+    "others"
   ],
   "fields": {
     "login": {
